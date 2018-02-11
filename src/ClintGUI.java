@@ -15,6 +15,7 @@ import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -24,16 +25,26 @@ public class ClintGUI extends JFrame {
 	private String sendContent=null;
 	private String currentContent="";
 	private String userName;
-	
+	private Socket s;
 	static JTextArea topT;
-	public ClintGUI(String userName) throws UnknownHostException, IOException
+	public ClintGUI() throws  IOException
 	{
 		//Set userName
+		String userName = JOptionPane.showInputDialog(null, "Input your name", "User input", JOptionPane.QUESTION_MESSAGE);
 		this.userName=userName;
 		//Set socket
-		Socket s=new Socket("192.168.1.13",30000);
+		try {
+		s=new Socket("192.168.1.13",30000);
 		PrintStream ps=new PrintStream(s.getOutputStream());
 		ps.println("Name:"+userName);
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, "Sorry, Connection fails", "Adding failed",
+					JOptionPane.WARNING_MESSAGE, null);
+			return;
+		}
+		
 
 		topT=new JTextArea(100,50);
 		 topT.setEditable(false);
